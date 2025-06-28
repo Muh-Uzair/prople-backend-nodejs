@@ -1,6 +1,8 @@
 import app from "./app";
 import dotenv from "dotenv";
 
+// faltu
+
 dotenv.config({ path: "./config.env" });
 
 // ✅ Only listen if the file is run directly (NOT when imported by Vercel)
