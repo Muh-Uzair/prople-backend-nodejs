@@ -5,8 +5,6 @@ dotenv.config({ path: "./config.env" });
 
 // ✅ Only listen if the file is run directly (NOT when imported by Vercel)
 if (require.main === module) {
-  console.log(process.env.PORT);
-
   const port = process.env.PORT || 4000;
   const server = app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
