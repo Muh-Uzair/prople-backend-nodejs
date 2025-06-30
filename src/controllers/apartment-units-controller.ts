@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
 // FUNCTION
 export const getAllApartmentUnits = (req: Request, res: Response) => {

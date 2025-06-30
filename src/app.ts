@@ -13,13 +13,13 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.get("/", (req: Request, res, Response) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Welcome to the Prople Backend API",
   });
 });
 
-app.get("/example", (req: Request, res, Response) => {
+app.get("/example", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Welcome to the Prople Backend API example",
   });
