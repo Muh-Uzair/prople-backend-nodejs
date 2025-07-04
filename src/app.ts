@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import apartmentUnitsRouter from "@/routes/apartment-units-routes";
 import unitsRouter from "@/routes/units-routes";
 
 dotenv.config({ path: "./config.env" });
@@ -14,19 +13,21 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// ROUTES
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
-    message: "Welcome to the Prople Backend API",
+    message: "welcome to prople backend",
   });
 });
 
-app.get("/example", (req: Request, res: Response) => {
-  res.status(200).json({
-    message: "Welcome to the Prople Backend API example",
-  });
-});
-
-app.use("/api/v1/apartment-units", apartmentUnitsRouter);
 app.use("/api/v1/units", unitsRouter);
+
+// request to api that is not on server
+app.use("*", (req: Request, res: Response) => {
+  res.status(404).json({
+    status: "fail",
+    message: "api not found",
+  });
+});
 
 export default app;
