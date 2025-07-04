@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import unitsRouter from "@/routes/units-routes";
@@ -22,11 +22,11 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/v1/units", unitsRouter);
 
-// request to api that is not on server
-app.use("*", (req: Request, res: Response) => {
+// Handle unknown routes (404)
+app.use((req: Request, res: Response) => {
   res.status(404).json({
     status: "fail",
-    message: "api not found",
+    message: `Cannot find ${req.originalUrl} on this server.`,
   });
 });
 

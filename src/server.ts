@@ -1,5 +1,19 @@
 /* eslint-disable */
 
+// Handle uncaught exception
+process.on("uncaughtException", (err: unknown) => {
+  console.log("Uncaught exception");
+
+  if (err instanceof Error) {
+    console.log(err);
+    console.log(err.name, err.message);
+  } else {
+    console.log(err);
+  }
+
+  process.exit(1);
+});
+
 import app from "./app";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
