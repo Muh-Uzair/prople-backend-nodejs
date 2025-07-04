@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import apartmentUnitsRouter from "@/routes/apartment-units-routes";
+import unitsRouter from "@/routes/units-routes";
 
 dotenv.config({ path: "./config.env" });
 
@@ -26,5 +27,6 @@ app.get("/example", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/apartment-units", apartmentUnitsRouter);
+app.use("/api/v1/units", unitsRouter);
 
 export default app;

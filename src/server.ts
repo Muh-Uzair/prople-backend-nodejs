@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import app from "./app";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
