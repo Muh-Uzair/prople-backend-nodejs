@@ -21,7 +21,6 @@ export default defineConfig([
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { argsIgnorePattern: "^_" },
@@ -34,9 +33,6 @@ export default defineConfig([
 
       // ✅ Warn on console.log (this is new)
       "no-console": ["warn", { allow: ["warn", "error"] }],
-
-      // Optional: also warn if you use "any"
-      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 

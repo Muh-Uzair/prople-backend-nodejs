@@ -1,7 +1,8 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import unitsRouter from "@/routes/units-routes";
+import buildingManagerRouter from "@/routes/building-manager-routes";
 
 dotenv.config({ path: "./config.env" });
 
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/units", unitsRouter);
+app.use("/api/v1/building-manager", buildingManagerRouter);
 
 // Handle unknown routes (404)
 app.use((req: Request, res: Response) => {
