@@ -15,8 +15,14 @@ export const buildingManagerSignUp = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(bodyData?.password, salt);
 
+    // 3 : prepare a dummy email
+    const email =
+      bodyData?.username?.length > 0
+        ? `dummyEmail${bodyData?.username?.slice(8)}@example.com`
+        : bodyData.email;
+
     // 3 : prepare the correct format
-    const dataToStore = { ...bodyData, password: hashedPassword };
+    const dataToStore = { ...bodyData, email, password: hashedPassword };
 
     //4 : create a user in DB
     const buildingManager: IBuildingManager = await BuildingManagerModel.create(

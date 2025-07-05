@@ -4,7 +4,8 @@ import validator from "validator";
 // 1. TypeScript interface for the document
 export interface IBuildingManager extends Document {
   name?: string;
-  email: string;
+  username?: string;
+  email?: string;
   password: string;
   phone?: string;
   avatar?: string;
@@ -19,11 +20,21 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
       trim: true,
       minlength: [2, "Name must be at least 2 characters"],
     },
+    username: {
+      type: String,
+      trim: true,
+      unique: true,
+      validate: {
+        validator: function (v) {
+          return /^manager@.+/.test(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid username. It must start with 'manager@'`,
+      },
+    },
     email: {
       type: String,
-      required: [true, "Email is required"],
       unique: true,
-      lowercase: true,
       validate: {
         validator: (val: string) =>
           validator.isEmail(val, {
@@ -36,7 +47,6 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
       validate: {
         validator: (val: string) =>

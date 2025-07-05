@@ -1,7 +1,11 @@
+/* eslint-disable */
+
 import { Response } from "express";
 
 export const errResponse = (res: Response, err: unknown): Response => {
   if (err instanceof Error) {
+    console.log("Actual error------------------------------------------------");
+    console.log(err);
     // handling duplicate fields
     if ((err as any).code === 11000) {
       // 1 : finding which fields are duplicate

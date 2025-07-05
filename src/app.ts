@@ -3,12 +3,14 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import unitsRouter from "@/routes/units-routes";
 import buildingManagerRouter from "@/routes/building-manager-routes";
+import cors from "cors";
 
 dotenv.config({ path: "./config.env" });
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
