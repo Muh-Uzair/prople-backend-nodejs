@@ -19,11 +19,13 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
       type: String,
       trim: true,
       minlength: [2, "Name must be at least 2 characters"],
+      lowercase: true,
     },
     username: {
       type: String,
       trim: true,
       unique: true,
+      lowercase: true,
       validate: {
         validator: function (v) {
           return /^manager@.+/.test(v);
@@ -35,6 +37,7 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
     email: {
       type: String,
       unique: true,
+      lowercase: true,
       validate: {
         validator: (val: string) =>
           validator.isEmail(val, {
@@ -48,6 +51,7 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
     password: {
       type: String,
       minlength: [6, "Password must be at least 6 characters long"],
+      select: false,
       validate: {
         validator: (val: string) =>
           validator.isStrongPassword(val, {

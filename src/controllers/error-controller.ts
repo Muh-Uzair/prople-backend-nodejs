@@ -15,14 +15,14 @@ export const errResponse = (res: Response, err: unknown): Response => {
       const message = `Duplicate fields not allowed ${errArr.join(", ")}`;
 
       // 3 : sending a response
-      return res.status(500).json({
+      return res.status(409).json({
         status: "fail",
         message,
       });
     }
 
     // handling other errors
-    return res.status(500).json({
+    return res.status(400).json({
       status: "fail",
       message: err.message,
     });
