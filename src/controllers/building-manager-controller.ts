@@ -2,12 +2,16 @@ import {
   BuildingManagerModel,
   IBuildingManager,
 } from "@/models/building-manager-model";
-import { Request, Response } from "express";
-import { errResponse } from "./error-controller";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt, { SignOptions } from "jsonwebtoken";
+import { AppError } from "@/utils/AppError";
 
-export const buildingManagerSignUp = async (req: Request, res: Response) => {
+export const buildingManagerSignUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     // 1 : take data out of body
     const bodyData = req.body;
@@ -45,14 +49,64 @@ export const buildingManagerSignUp = async (req: Request, res: Response) => {
       signOptions
     );
 
-    // 5 : send success response
+    // 7 : send the cookie
+    res.cookie("jwt", token, {
+      httpOnly: true, // prevents access from JavaScript (XSS protection)
+      secure: process.env.NODE_ENV === "production", // only sent over HTTPS in production
+      sameSite: "lax", // or "strict" / "none" depending on frontend/backend setup
+      path: "/",
+      maxAge: 3 * 24 * 60 * 60 * 1000, // in milliseconds
+    });
+
+    // 8 : send success response
     res.status(200).json({
       status: "success",
       message: "Building manger sign up success",
-      buildingManager,
-      jwt: token,
+      data: { buildingManager },
     });
   } catch (err: unknown) {
-    errResponse(res, err);
+    return next(err);
+  }
+};
+
+export const getCurrBuildingManager = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // 1 : check that the received jwt is valid or not
+    const token = req.cookies?.jwt;
+
+    if (!token) {
+      return next(new AppError("Token is missing", 401));
+    }
+    // 2 : take the building manager id out of it
+    const jwtSecret = process.env.JWT_SECRET as string;
+    if (!jwtSecret) {
+      return next(new AppError("JWT secret is not defined", 500));
+    }
+    const decodedToken = jwt.verify(token, jwtSecret) as { id: string };
+
+    // 3 : check the building manager against that id
+    const buildingManagerId = decodedToken?.id;
+
+    const buildingManager = await BuildingManagerModel.findById(
+      buildingManagerId
+    );
+
+    if (!buildingManager) {
+      return next(new AppError("Building manager not found", 404));
+    }
+
+    // 4 : if building manager is available than send that
+    res.status(200).json({
+      status: "success",
+      data: {
+        buildingManager,
+      },
+    });
+  } catch (err: unknown) {
+    return next(err);
   }
 };

@@ -31,8 +31,8 @@ mongoose
 
 // ✅ Only listen if the file is run directly (NOT when imported by Vercel)
 if (require.main === module) {
-  const port = process.env.PORT || 4000;
-  const server = app.listen(port, () => {
+  const port = Number(process.env.PORT || 4000);
+  const server = app.listen(port, "localhost", () => {
     console.log(`Server is listening on port ${port}`);
   });
 

@@ -1,35 +1,35 @@
-/* eslint-disable */
+import { Request, Response } from "express";
+import { AppError } from "@/utils/AppError";
+import { MongoServerError } from "mongodb";
 
-import { Response } from "express";
+export const globalErrorHandler = (
+  err: unknown,
+  req: Request,
+  res: Response
+) => {
+  console.log("Global error handler triggered");
 
-export const errResponse = (res: Response, err: unknown): Response => {
-  if (err instanceof Error) {
-    console.log("Actual error------------------------------------------------");
-    console.log(err);
-    // handling duplicate fields
-    if ((err as any).code === 11000) {
-      // 1 : finding which fields are duplicate
-      const errArr = Object.keys((err as any)?.keyPattern);
-
-      // 2 : preparing a message
-      const message = `Duplicate fields not allowed ${errArr.join(", ")}`;
-
-      // 3 : sending a response
-      return res.status(409).json({
-        status: "fail",
-        message,
-      });
-    }
-
-    // handling other errors
-    return res.status(400).json({
+  // Handle known AppError
+  if (err instanceof AppError) {
+    return res.status(err.errCode).json({
       status: "fail",
       message: err.message,
     });
-  } else {
-    return res.status(500).json({
+  }
+
+  // Handle MongoDB duplicate key error (E11000)
+  if (err instanceof MongoServerError && err.code === 11000) {
+    const duplicatedFields = Object.keys(err.keyValue || {}).join(", ");
+    return res.status(409).json({
       status: "fail",
-      message: "An unexpected error has occurred",
+      message: `Duplicate value for field(s): ${duplicatedFields}`,
     });
   }
+
+  // Handle unknown errors
+  console.error("Unexpected error:", err);
+  return res.status(500).json({
+    status: "error",
+    message: "Something went wrong",
+  });
 };
