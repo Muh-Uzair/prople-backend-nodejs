@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { AppError } from "@/utils/AppError";
 
+// FUNCTION
 export const buildingManagerSignUp = async (
   req: Request,
   res: Response,
@@ -69,6 +70,7 @@ export const buildingManagerSignUp = async (
   }
 };
 
+// FUNCTION
 export const getCurrBuildingManager = async (
   req: Request,
   res: Response,
