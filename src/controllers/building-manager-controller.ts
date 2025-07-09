@@ -112,3 +112,14 @@ export const getCurrBuildingManager = async (
     return next(err);
   }
 };
+
+// FUNCTION
+export const buildingManagerLogout = (req: Request, res: Response) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};
