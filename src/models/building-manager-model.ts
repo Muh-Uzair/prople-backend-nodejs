@@ -1,16 +1,8 @@
-import { Schema, Document, model, Types } from "mongoose";
+import { IBuildingManager } from "@/types/building-manager-types";
+import { Schema, model } from "mongoose";
 import validator from "validator";
 
 // 1. TypeScript interface for the document
-export interface IBuildingManager extends Document {
-  name?: string;
-  username?: string;
-  email?: string;
-  password: string;
-  phone?: string;
-  avatar?: string;
-  associatedBuildings?: Types.ObjectId[];
-}
 
 // 2. Mongoose Schema
 const buildingManagerSchema = new Schema<IBuildingManager>(
@@ -84,6 +76,12 @@ const buildingManagerSchema = new Schema<IBuildingManager>(
         type: Schema.Types.ObjectId,
       },
     ],
+
+    role: {
+      type: String,
+      default: "buildingManager",
+      immutable: true,
+    },
   },
   { timestamps: true }
 );

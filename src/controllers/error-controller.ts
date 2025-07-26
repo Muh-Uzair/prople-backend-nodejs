@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Request, Response } from "express";
 import { AppError } from "@/utils/AppError";
 import { MongoServerError } from "mongodb";
